@@ -85,4 +85,5 @@ type Result struct {
 	CountJsFiles            string `json:"count-js-files"`
 	CountTags               string `json:"count-tags"`
 	KeepReason              string `json:"keepreason"`
+	Title			string
 }
