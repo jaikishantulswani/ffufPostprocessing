@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"github.com/PuerkitoBio/goquery"
 )
 
 func EnrichResultsWithRedirectData(Entries *[]_struct.Result) {
@@ -44,6 +45,10 @@ func EnrichResults(FfufBodiesFolder string, Entries *[]_struct.Result) {
 			(*Entries)[i].CountCssFiles = CountCssFiles(Body)
 			(*Entries)[i].CountJsFiles = CountJsFiles(Body)
 			(*Entries)[i].CountTags = CountTags((*Entries)[i].ContentType, Body)
+			// Extract and store the page title
+			title, _ := ExtractTitleFromHTML(Body)
+			(*Entries)[i].Title = title
+
 			<-sem
 		}(i)
 
@@ -91,4 +96,14 @@ func SeperateContentIntoHeadersAndBody(Content string) (string, string) {
 	HeaderString = (strings.Trim(HeaderString, "\r\n"))
 	BodyString = (strings.Trim(BodyString, "\r\n"))
 	return HeaderString, BodyString
+}
+
+func ExtractTitleFromHTML(htmlContent string) (string, error) {
+    doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlContent))
+    if err != nil {
+        return "", err
+    }
+
+    title := doc.Find("title").Text()
+    return title, nil
 }
