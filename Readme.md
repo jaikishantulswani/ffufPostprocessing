@@ -1,3 +1,6 @@
+# Changes
+Added Title field in json response
+
 # Ffuf: Post processing
 Unfortunately - despite its "-ac" flag, ffuf tends to produce a lot of irrelevant entries. This is why I've created a post-processing tool to filter out those entries. 
 Additionally, I saw a lot of relevant entries removed when "-ac" was used - especially when ffuf encounters json or xml files - "-ac" might drop them entirely.
